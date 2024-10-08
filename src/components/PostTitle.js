@@ -8,7 +8,7 @@ const PostTitle = ({ post, onClick, isActive}) => {
       <p>{new Date(post.timestamp).toLocaleString()}</p>
       {isActive && (
         <div className='expanded-content'>
-          <img src={post.imageUrl} alt={post.title} />
+          {post.imageUrl && <img src={post.imageUrl} alt={post.title} style={{width:'50%', marginTop: '10px' }}/>}
           <p>{post.content}</p>
         </div>
       )}
