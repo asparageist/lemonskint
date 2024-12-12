@@ -8,21 +8,16 @@ const SkintLog = () => {
   const [error, setError] = useState(null);
   const logoRef = useRef(null);
 
-  // Lens flare effect
   const handleMouseMove = (e) => {
     if (logoRef.current) {
       const rect = logoRef.current.getBoundingClientRect();
-      
       const centerX = rect.left + (rect.width / 2);
       const centerY = rect.top + (rect.height / 2);
-      
       const mouseX = e.clientX - centerX;
       const mouseY = e.clientY - centerY;
-      
       const distance = Math.sqrt(mouseX * mouseX + mouseY * mouseY);
       const maxDistance = 400;
       const scale = Math.max(0, 1 - (distance / maxDistance));
-      
       const mirrorX = centerX - mouseX;
       const mirrorY = centerY - mouseY;
       
@@ -43,19 +38,8 @@ const SkintLog = () => {
       try {
         const response = await fetch('https://skintonline-api-production.up.railway.app/posts');
         const data = await response.json();
-        console.log('API Response:', data); // Debug log
-        
-        // Ensure data is an array
-        if (Array.isArray(data)) {
-          setPosts(data);
-        } else {
-          console.error('Data is not an array:', data);
-          setPosts([]);
-          setError('Invalid data format received');
-        }
+        setPosts(data);
       } catch (error) {
-        console.error('Error fetching posts:', error);
-        setPosts([]);
         setError('Failed to fetch posts');
       }
     };
@@ -69,8 +53,6 @@ const SkintLog = () => {
         : [...prevExpanded, id]
     );
   };
-
-  const sortedPosts = posts;
 
   return (
     <div className="dev-log">
@@ -88,7 +70,7 @@ const SkintLog = () => {
         <div className="lens-flare"></div>
       </div>
       {error && <div style={{color: 'red'}}>{error}</div>}
-      {sortedPosts.map((post) => (
+      {posts.map((post) => (
         <div key={post.id}>
           <PostTitle
             post={post}
