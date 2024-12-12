@@ -1,67 +1,100 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PostTitle from './PostTitle';
-import NewPost from './NewPost';
+import logo from '../images/lemonlogo.png';
 
 const SkintLog = () => {
   const [posts, setPosts] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [error, setError] = useState(null);
+  const logoRef = useRef(null);
+
+  // Lens flare effect
+  const handleMouseMove = (e) => {
+    if (logoRef.current) {
+      const rect = logoRef.current.getBoundingClientRect();
+      
+      const centerX = rect.left + (rect.width / 2);
+      const centerY = rect.top + (rect.height / 2);
+      
+      const mouseX = e.clientX - centerX;
+      const mouseY = e.clientY - centerY;
+      
+      const distance = Math.sqrt(mouseX * mouseX + mouseY * mouseY);
+      const maxDistance = 400;
+      const scale = Math.max(0, 1 - (distance / maxDistance));
+      
+      const mirrorX = centerX - mouseX;
+      const mirrorY = centerY - mouseY;
+      
+      logoRef.current.style.setProperty('--x', `${mirrorX}px`);
+      logoRef.current.style.setProperty('--y', `${mirrorY}px`);
+      logoRef.current.style.setProperty('--scale', scale);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (logoRef.current) {
+      logoRef.current.style.setProperty('--scale', '0');
+    }
+  };
 
   useEffect(() => {
-    fetch('http://localhost:5000/posts')
-      .then((res) => res.json())
-      .then((data) => setPosts(data));
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('https://skintonline-api-production.up.railway.app/posts');
+        const data = await response.json();
+        console.log('API Response:', data); // Debug log
+        
+        // Ensure data is an array
+        if (Array.isArray(data)) {
+          setPosts(data);
+        } else {
+          console.error('Data is not an array:', data);
+          setPosts([]);
+          setError('Invalid data format received');
+        }
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+        setPosts([]);
+        setError('Failed to fetch posts');
+      }
+    };
+    fetchPosts();
   }, []);
 
   const togglePost = (id) => {
     setExpandedPosts((prevExpanded) => 
-      prevExpanded.includes(id) ? prevExpanded.filter((postId) => postId !== id) : [...prevExpanded, id]
+      prevExpanded.includes(id) 
+        ? prevExpanded.filter((postId) => postId !== id) 
+        : [...prevExpanded, id]
     );
   };
 
-  const addPost = (newPost) => {
-    const newId = posts.length ? posts[posts.length - 1].id + 1 : 1;
-    const timestamp = new Date().toISOString();
-    const updatedPost = { ...newPost, id: newId, timestamp };
-
-    console.log('post this:', updatedPost);
-
-    fetch('http://localhost:5000/posts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedPost),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log('New post added:', data);
-        setPosts([...posts, data]);
-      })
-      .catch((err) => console.error('Error adding post', err));
-  };
-
-  const deletePost = (id) => {
-    fetch(`http://localhost:5000/posts/${id}`, {
-      method: 'DELETE',
-    }).then(() => setPosts(posts.filter((post) => post.id !== id)));
-  };
+  const sortedPosts = posts;
 
   return (
     <div className="dev-log">
-      <h1>DEV LOG</h1>
-      <button onClick={() => setIsAdmin(!isAdmin)}>
-        {isAdmin ? 'LOGOUT' : 'LOGIN'}
-      </button>
-      
-      {isAdmin && <NewPost addPost={addPost} />}
-
-      {[...posts].reverse().map((post) => (
+      <div 
+        className="logo-container" 
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        ref={logoRef}
+      >
+        <img 
+          src={logo} 
+          alt="Skint Log Logo" 
+          className="logo"
+        />
+        <div className="lens-flare"></div>
+      </div>
+      {error && <div style={{color: 'red'}}>{error}</div>}
+      {sortedPosts.map((post) => (
         <div key={post.id}>
           <PostTitle
             post={post}
             isActive={expandedPosts.includes(post.id)}
             onClick={() => togglePost(post.id)}
           />
-          {isAdmin && <button onClick={() => deletePost(post.id)}>DELETE</button>}
         </div>
       ))}
     </div>
