@@ -17,7 +17,11 @@
 }
 
 .nav-content {
+<<<<<<< HEAD
   max-width: 700;
+=======
+  max-width: 800;
+>>>>>>> f70dab3c9f6e3cddd8cec854c18344a055f2b3fb
   margin: 0 auto;
   display: flex;
   justify-content: flex-end;
