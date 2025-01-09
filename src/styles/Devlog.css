@@ -1,9 +1,5 @@
 body {
-  background: radial-gradient(
-    circle at bottom left,
-    steelblue, 
-    skyblue 90% 
-  );
+  background: radial-gradient(circle at bottom left, steelblue, skyblue 90%);
   min-height: 100vh;
   margin: 0;
 }
@@ -29,6 +25,8 @@ body {
   cursor: default;
   transition: all 0.3s ease;
   background: rgba(255, 255, 255, 0.5);
+  position: relative;
+  z-index: 1;
 }
 
 .dev-post:hover {
@@ -38,8 +36,10 @@ body {
 
 .dev-post.active {
   background: rgba(255, 255, 255, 0.9);
-  transform: scale(1.05);
+  transform: scale(1.02);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  margin: 20px 0;
 }
 
 .expanded-content {
@@ -79,66 +79,19 @@ body {
 }
 
 .lens-flare {
-  position: fixed;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: -50px;
+  left: -50px;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  transform: translate(var(--x, 0), var(--y, 0)) scale(var(--scale, 0));
   pointer-events: none;
-  width: 1000px;
-  height: 1000px;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle calc(30px * var(--scale, 0)) at center,
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0) 70%
-  );
-  mix-blend-mode: screen;
-  transition: opacity 0.1s ease;
-  left: var(--x, 50%);
-  top: var(--y, 50%);
-}
-
-.logo-container:hover .lens-flare {
-  opacity: 1;
+  transition: transform 0.1s ease-out;
 }
 
 .markdown-content {
   line-height: 1.6;
-}
-
-.markdown-content h1 {
-  font-size: 1.8em;
-  margin: 1em 0 0.5em;
-}
-
-.markdown-content h2 {
-  font-size: 1.5em;
-  margin: 1em 0 0.5em;
-}
-
-.markdown-content p {
-  margin: 1em 0;
-}
-
-.markdown-content a {
-  color: #0066cc;
-  text-decoration: none;
-}
-
-.markdown-content a:hover {
-  text-decoration: underline;
-}
-
-.markdown-content ul, 
-.markdown-content ol {
-  margin: 1em 0;
-  padding-left: 2em;
-}
-
-.markdown-content strong {
-  font-weight: bold;
-}
-
-.markdown-content em {
-  font-style: italic;
 }
 
 .image-gallery {
@@ -155,17 +108,12 @@ body {
   transition: transform 0.2s;
 }
 
-.image-gallery img:hover {
-  transform: scale(1.02);
-}
-
-.image-container {
-  margin-bottom: 1rem;
-}
-
-.image-url {
-  font-size: 0.8em;
+.post-meta {
+  font-size: 0.9em;
   color: #666;
-  word-break: break-all;
-  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.timestamp {
+  font-style: italic;
 }
