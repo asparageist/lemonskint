@@ -1,0 +1,165 @@
+body {
+  background: radial-gradient(
+    circle at bottom left,
+    steelblue, 
+    skyblue 70% 
+  );
+  min-height: 100vh;
+  margin: 0;
+}
+
+.dev-log {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.dev-log > div {
+  width: 100%;
+}
+
+.dev-post {
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: default;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.dev-post:hover {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dev-post.active {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.expanded-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+  border-top: 2px solid #ddd;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.dev-post.active .expanded-content {
+  max-height: 2000px;
+  opacity: 1;
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+.logo-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+  margin: 20px 0;
+  display: block;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+  transition: filter 0.3s ease;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+}
+
+.lens-flare {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: -50px;
+  left: -50px;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  transform: translate(var(--x, 0), var(--y, 0)) scale(var(--scale, 0));
+  pointer-events: none;
+  transition: transform 0.1s ease-out;
+}
+
+.logo-container:hover .lens-flare {
+  opacity: 1;
+}
+
+.markdown-content {
+  line-height: 1.6;
+}
+
+.markdown-content h1 {
+  font-size: 1.8em;
+  margin: 1em 0 0.5em;
+}
+
+.markdown-content h2 {
+  font-size: 1.5em;
+  margin: 1em 0 0.5em;
+}
+
+.markdown-content p {
+  margin: 1em 0;
+}
+
+.markdown-content a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.markdown-content a:hover {
+  text-decoration: underline;
+}
+
+.markdown-content ul, 
+.markdown-content ol {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+.markdown-content strong {
+  font-weight: bold;
+}
+
+.markdown-content em {
+  font-style: italic;
+}
+
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.image-gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  transition: transform 0.2s;
+}
+
+.image-gallery img:hover {
+  transform: scale(1.02);
+}
+
+.image-container {
+  margin-bottom: 1rem;
+}
+
+.image-url {
+  font-size: 0.8em;
+  color: #666;
+  word-break: break-all;
+  margin-top: 0.5rem;
+}
