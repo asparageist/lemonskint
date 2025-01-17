@@ -5,11 +5,7 @@ const app = express();
 
 const PORT = 5000;
 
-app.use(cors({
-  origin: ['https://lemonskint.com', 'https://www.lemonskint.com', 'https://lemonskint.vercel.app', 'http://localhost:3000'],
-  methods: ['GET', 'POST', 'DELETE'],
-  credentials: true
-}));
+app.use(cors({}));
 app.use(express.json());
 
 
